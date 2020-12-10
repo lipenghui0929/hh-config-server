@@ -1,0 +1,180 @@
+#==========日志打印级别==========
+logging:
+  level:
+    com:
+      paic:
+        pd: DEBUG
+
+#==========数据库连接配置==========
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+  datasource:
+    dataType: oracle
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    filters: stat
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    oracle:
+      url: jdbc:oracle:thin:@30.99.137.49:1521:pasepd
+      username: bigscreen
+      password: C0BD6DF6DCF0C3B2C1F0EA81504B5603
+      driverClassName: oracle.jdbc.driver.OracleDriver
+      validationQuery: SELECT 'X' FROM DUAL
+    mysql:
+      url: jdbc:mysql://30.99.137.48:3306/bigscreen?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&serverTimezone=GMT%2B8&useSSL=false&allowMultiQueries=true
+      username: admin
+      password: C0BD6DF6DCF0C3B2C1F0EA81504B5603
+      driverClassName: com.mysql.cj.jdbc.Driver
+      validationQuery: SELECT 'X'
+
+  messages:
+    basename: META-INF/locale/messages
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+#==========mybatis配置==========
+mybatis:
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+  config-location: classpath:mapper/mybatis-config.xml
+  type-aliases-package: com.paic.pd.**.entity
+ 
+#==========tableau配置==========
+tableau:
+  api:
+    host: http://30.99.140.42
+    version: 3.3
+    username: tableauAdmin
+    password: tableauAdmin
+    defaultSiteId: 5df611ed-b59e-4960-a759-882025c6b2e8
+    defaultSiteUrl: pase
+    defaultProjectId: 04d92642-515e-427f-b3ff-6bfd92ebd9a8
+    authTimeOut: 7200
+    pageSize: 1000
+  front:
+    host: http://30.99.140.42
+
+#==========上传文件配置==========
+file:
+  systemToken: abxznj****11123
+  uploadMaxSize: 104857600
+  uploadBasePath: D:\\tmp\\
+  uploadSuffix: gif,jpg,xls,doc,htm,bmp,tif,ppt,pdf,mht,mpp,msg,rtf,rar,zip,txt,log,html,docx,xlsx,pptx,vsd,csv,wav,jpeg,png,7z,bz2,gz,tar,wim,xz,ttf
+
+#==========验证码失效时间(秒)==========
+validatecode:
+  emailtimeout: 300
+  smstimeout: 300
+
+management:
+  health:
+    redis:
+      enabled: false
+  endpoint:
+    health:
+      show-details: always
+  security:
+    enabled: false
+
+pagehelper:
+  helperDialet: ${spring.datasource.dataType}
+  offsetAsPageNum: true
+  rowBoundsWithCount: true
+  reasonable: false
+
+
+#==========断路器超时时间设置==========
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds:  6500000
+    user-center:
+      execution:
+        timeout: true
+        isolation:
+          thread:
+            timeoutInMilliseconds:  65000000
+    big-screen:
+      execution:
+        timeout: true
+        isolation:
+          thread:
+            timeoutInMilliseconds:  6500000
+    base-service:
+      execution:
+        timeout: true
+        isolation:
+          thread:
+            timeoutInMilliseconds:  6500000
+    big-screen-zd:
+      execution:
+        timeout: true
+        isolation:
+          thread:
+            timeoutInMilliseconds:  65000
+
+#==========ribbon的超时时间==========
+ribbon:
+  ReadTimeout: 1000000
+  ConnectTimeout: 10000
+
+upload:
+  token: abxznj****11123
+  prefixUrl: http://30.99.137.49:8098/base-service/fileServer
+  uploadBasePath: /data/uf/
+  tmpPath: D:\\tmp\\
+
+#======nginx信息,获取tableau详情图接口，避免暴露真实ip=========
+nginx:
+  server: 127.0.0.1
+  appserver: 30.99.137.51
+  api:
+    port: 8099
+    lgport: 8101
+#redis是否集群配置,单机:single或为空,为空默认是单机,单机配置"配置中心"config/redis/sing.yml,
+#哨兵:sentinel,哨兵配置"配置中心"config/redis/sentinel.yml
+#集群:cluster,集训配置"配置中心"config/redis/cluster.yml
+redis:
+  active: single
+
+ssoDock:
+  customer: jf
+
+#组件"动态数据库表"选择配置,prefix要选择表的前缀,多个用逗号分隔
+dynamic:
+  table:
+    prefix: DP_,D_DIM,V_DIM
+    lines: 9999
+
+#多租户
+tenant:
+  tenant_id: PA001
+
+idm:
+  login:
+    url: http://localhost:7310/idm/login
+  menu:
+    url:
+      getMenuAndActionByRole: http://localhost:7310/idm/menu/role/getAllMenuAndActionByRoleIds
+  user:
+    url:
+      updatePassword: http://localhost:7310/idm/user/updatePassword
+      detail: http://localhost:7310/idm/user/detail
+  role:
+    url:
+      getRoleTree: http://30.23.12.152:7310/idm/role/getRoleTree
+
+systemId: aa7566aae29047f884fe74aa1cbb0368
